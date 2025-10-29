@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Milésimo Gol — Acompanhe CR7 rumo aos 1000</title>
+  <meta name="description" content="Contagem ao vivo, estatísticas e projeções para o milésimo gol de Cristiano Ronaldo." />
+  <style>
+    /* --- Paleta: vermelho, branco, amarelo --- */
+    :root{
+      --red: #C8102E;     /* Manchester / Portugal */
+      --white: #ffffff;   /* Real Madrid */
+      --yellow: #FFD400;  /* Al Nassr */
+      --bg: #0b0b0b;
+      --muted: #e6e6e6;
+      --card-bg: #111111;
+      --max-width: 1100px;
+      --radius: 10px;
+      --font-sans: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background: linear-gradient(180deg, #070707 0%, #0f0f0f 100%);
+      color:var(--muted);
+      font-family:var(--font-sans);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.4;
+    }
+    .container{max-width:var(--max-width); margin:24px auto; padding:16px;}
+    header{display:flex;align-items:center;gap:16px; justify-content:space-between;}
+    .brand{display:flex;align-items:center;gap:12px;}
+    .logo{
+      width:64px;height:64px;border-radius:12px;
+      background: linear-gradient(135deg,var(--red), var(--yellow));
+      display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--white);font-size:18px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.6);
+    }
+    h1{margin:0;font-size:20px;color:var(--white);}
+    p.lead{margin:0;color:#f3f3f3;opacity:0.9}
+
+    /* Top ad placeholder */
+    .ad-top{width:100%;height:90px;border-radius:8px;background:linear-gradient(90deg,#1a1a1a,#121212);
+      display:flex;align-items:center;justify-content:center;color:#bbb;border:2px dashed rgba(255,255,255,0.06); margin:16px 0;}
+    .layout{display:grid;grid-template-columns: 1fr 320px; gap:20px; align-items:start;}
+
+    /* Main card */
+    .card{background:linear-gradient(180deg,#0f0f0f,#0a0a0a);border-radius:var(--radius);padding:18px;box-shadow:0 8px 30px rgba(0,0,0,0.6);}
+    .counter{display:flex;gap:24px;align-items:center;}
+    .counter .big{font-size:44px;font-weight:800;color:var(--white);letter-spacing:1px;}
+    .progress-wrap{width:100%}
+    progress{width:100%;height:14px;border-radius:8px;appearance:none;overflow:hidden;}
+    progress::-webkit-progress-bar{background:#1a1a1a;}
+    progress::-webkit-progress-value{background:linear-gradient(90deg,var(--red),var(--yellow));}
+    .small{font-size:13px;color:#ddd}
+
+    /* Stats */
+    .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;}
+    .stat{background:rgba(255,255,255,0.03);padding:10px;border-radius:8px;text-align:center;}
+    .stat .num{font-weight:700;font-size:18px;color:var(--white)}
+    .stat .label{font-size:12px;color:#ccc;margin-top:6px}
+
+    /* Projeções */
+    .projecao{margin-top:18px;padding:12px;background:linear-gradient(180deg,#0b0b0b,#0f0f0f);border-radius:8px;border:1px solid rgba(255,255,255,0.03)}
+    label{display:block;font-size:13px;color:#cfcfcf;margin-bottom:6px}
+    input[type="number"], input[type="text"], select{
+      width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--muted)
+    }
+    .btn{display:inline-block;padding:10px 14px;border-radius:8px;background:linear-gradient(90deg,var(--red),var(--yellow));color:var(--white);font-weight:700;border:0;cursor:pointer}
+    .muted{color:#999;font-size:13px}
+
+    /* Sidebar */
+    .sidebar{position:sticky;top:20px;}
+    .ad-side{width:100%;height:600px;border-radius:8px;background:linear-gradient(180deg,#121212,#0e0e0e);display:flex;align-items:center;justify-content:center;color:#bbb;border:2px dashed rgba(255,255,255,0.06)}
+    .card h3{color:var(--white);margin:0 0 10px 0}
+    .timeline{margin-top:10px}
+
+    /* Mid ad */
+    .ad-mid{height:120px;border-radius:8px;background:linear-gradient(90deg,#151515,#101010);display:flex;align-items:center;justify-content:center;color:#ddd;border:2px dashed rgba(255,255,255,0.06);margin:18px 0}
+
+    /* Footer */
+    footer{margin-top:26px;color:#aaa;font-size:13px;text-align:center;padding:14px 0}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .layout{grid-template-columns:1fr;}
+      .sidebar{position:static;}
+      .stats-grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:480px){
+      .stats-grid{grid-template-columns:1fr}
+      .counter{flex-direction:column;align-items:flex-start}
+      .logo{width:56px;height:56px}
+      .big{font-size:36px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">MG</div>
+        <div>
+          <h1>Milésimo Gol</h1>
+          <p class="lead">Acompanhe Cristiano Ronaldo rumo ao milésimo gol — estatísticas, projeções e notícias.</p>
+        </div>
+      </div>
+      <div class="small muted">Design: vermelho • branco • amarelo</div>
+    </header>
+
+    <!-- Top ad placeholder (substitua pelo código do AdSense) -->
+    <div class="ad-top card">
+      <div>
+        <div style="font-weight:700;color:#ddd">Espaço publicitário — Top Banner</div>
+        <div style="font-size:12px;color:#aaa">Substitua por Google AdSense / parceiro</div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <!-- main -->
+      <main>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <h2 style="margin:0;color:var(--white)">Contagem Rumo aos 1000</h2>
+              <div class="small">Atualize os gols reais para manter a contagem correta.</div>
+            </div>
+            <div class="muted">Última atualização: <span id="lastUpdated">--</span></div>
+          </div>
+
+          <div style="margin-top:14px" class="counter">
+            <div style="min-width:170px">
+              <div class="big" id="currentGoals">0</div>
+              <div class="small">Gols atuais de Cristiano Ronaldo</div>
+            </div>
+
+            <div class="progress-wrap">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div class="small">Faltam <strong id="goalsLeft">1000</strong> gols</div>
+                <div class="small" id="percentText">0%</div>
+              </div>
+              <progress id="progressBar" value="0" max="1000"></progress>
+            </div>
+          </div>
+
+          <!-- estatísticas resumidas -->
+          <div class="stats-grid" style="margin-top:16px">
+            <div class="stat">
+              <div class="num" id="statClubs">0</div>
+              <div class="label">Gols por clubes</div>
+            </div>
+            <div class="stat">
+              <div class="num" id="statSelecao">0</div>
+              <div class="label">Gols pela seleção</div>
+            </div>
+            <div class="stat">
+              <div class="num" id="statTotal">0</div>
+              <div class="label">Total (auto)</div>
+            </div>
+          </div>
+
+          <!-- mid ad placeholder -->
+          <div class="ad-mid">
+            <div>
+              <div style="font-weight:700">Espaço publicitário — Mid Page</div>
+              <div style="font-size:12px;color:#bbb">Substitua por AdSense/affiliate</div>
+            </div>
+          </div>
+
+          <!-- projeção -->
+          <div class="projecao">
+            <h3 style="margin-top:0">Projeção — quando CR7 chega aos 1000?</h3>
+            <div class="small muted">Preencha a média que você acredita e veja a estimativa.</div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+              <div>
+                <label>Gols atuais (valor usado para cálculo)</label>
+                <input id="inputGoals" type="number" min="0" value="0" />
+              </div>
+              <div>
+                <label>Média de gols por jogo</label>
+                <input id="inputGoalsPerGame" type="number" step="0.01" min="0" value="0.4" />
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+              <div>
+                <label>Jogos estimados por mês</label>
+                <input id="inputGamesPerMonth" type="number" step="1" min="0" value="4" />
+              </div>
+              <div>
+                <label>Data de referência (hoje)</label>
+                <input id="inputRefDate" type="text" value="" />
+              </div>
+            </div>
+
+            <div style="margin-top:12px;display:flex;gap:10px;align-items:center">
+              <button class="btn" id="calcBtn">Calcular projeção</button>
+              <div class="muted" id="projResult">Preencha os dados e clique em Calcular</div>
+            </div>
+
+            <div style="margin-top:10px" class="small muted">
+              Observação: a projeção é uma estimativa simples (linear) — você pode integrar dados reais por API para maior precisão.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- seção carreira / timeline -->
+        <div class="card" style="margin-top:16px">
+          <h3>Linha do tempo — carreira de Cristiano Ronaldo</h3>
+          <div class="timeline">
+            <ul style="padding-left:18px;color:#ddd;margin-top:8px">
+              <li><strong>1997–2003</strong> — Formação no Sporting CP</li>
+              <li><strong>2003–2009</strong> — Manchester United: primeiros grandes títulos</li>
+              <li><strong>2009–2018</strong> — Real Madrid: época de recordes e títulos</li>
+              <li><strong>2018–2021</strong> — Juventus</li>
+              <li><strong>2021–2023</strong> — Retorno ao Manchester United</li>
+              <li><strong>2023–presente</strong> — Al Nassr</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- seção últimas notícias -->
+        <div class="card" style="margin-top:16px">
+          <h3>Últimos gols / Notas rápidas</h3>
+          <p class="muted">Aqui você pode integrar um feed de notícias (RSS) ou um bloco manual com atualizações após cada jogo.</p>
+          <ul id="recentGoals" style="margin-top:8px;color:#e6e6e6">
+            <li>Nenhuma atualização automática ativa — adicione manualmente ou integre API.</li>
+          </ul>
+        </div>
+      </main>
+
+      <!-- sidebar -->
+      <aside class="sidebar">
+        <div class="card" style="margin-bottom:12px">
+          <h3>Estatísticas detalhadas</h3>
+          <table style="width:100%;border-collapse:collapse;color:#ddd">
+            <tr><td style="padding:6px 0">Clubes (exemplo)</td><td style="text-align:right;font-weight:700" id="clubGoals">0</td></tr>
+            <tr><td style="padding:6px 0">Seleção</td><td style="text-align:right;font-weight:700" id="selGoals">0</td></tr>
+            <tr><td style="padding:6px 0">Pênaltis</td><td style="text-align:right;font-weight:700" id="penGoals">0</td></tr>
+            <tr><td style="padding:6px 0">Faltas</td><td style="text-align:right;font-weight:700" id="freeGoals">0</td></tr>
+            <tr><td style="padding:6px 0">Cabeça</td><td style="text-align:right;font-weight:700" id="headGoals">0</td></tr>
+          </table>
+          <div style="margin-top:10px" class="muted">Substitua valores com dados reais ou via API.</div>
+        </div>
+
+        <!-- Sidebar ad placeholder -->
+        <div class="ad-side card">
+          <div>
+            <div style="font-weight:700">Espaço publicitário — Lateral</div>
+            <div style="font-size:12px;color:#bbb">Ex.: 300x600 AdSense</div>
+          </div>
+        </div>
+
+        <!-- quick links -->
+        <div class="card" style="margin-top:12px">
+          <h3>Links rápidos</h3>
+          <ul style="color:#ddd;padding-left:16px">
+            <li><a href="#" style="color:var(--yellow)">Biografia completa</a></li>
+            <li><a href="#" style="color:var(--yellow)">Lista de gols por temporada</a></li>
+            <li><a href="#" style="color:var(--yellow)">Metodologia de contagem</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      © <span id="footerYear"></span> Milésimo Gol — Site independente. Dados devem ser verificados com fontes oficiais.
+    </footer>
+  </div>
+
+  <script>
+    /* ---------- Configuráveis ---------- */
+    // <--- Defina aqui os valores iniciais (ou atualize direto na interface) --->
+    const cfg = {
+      goalsCurrent: 0,        // numero inicial (coloque o número real)
+      goalsByClub: 0,         // ex.: gols somando clubes
+      goalsBySel: 0,          // gols pela seleção
+      penGoals: 0,
+      freeGoals: 0,
+      headGoals: 0
+    };
+
+    /* ---------- Funções de UI ---------- */
+    function updateUI(){
+      const cur = Number(cfg.goalsCurrent) || 0;
+      document.getElementById('currentGoals').textContent = cur;
+      document.getElementById('statClubs').textContent = Number(cfg.goalsByClub) || 0;
+      document.getElementById('statSelecao').textContent = Number(cfg.goalsBySel) || 0;
+      document.getElementById('statTotal').textContent = cur;
+      document.getElementById('clubGoals').textContent = cfg.goalsByClub;
+      document.getElementById('selGoals').textContent = cfg.goalsBySel;
+      document.getElementById('penGoals').textContent = cfg.penGoals;
+      document.getElementById('freeGoals').textContent = cfg.freeGoals;
+      document.getElementById('headGoals').textContent = cfg.headGoals;
+
+      const left = Math.max(0, 1000 - cur);
+      document.getElementById('goalsLeft').textContent = left;
+      document.getElementById('progressBar').value = Math.min(cur,1000);
+      const percent = Math.round((Math.min(cur,1000)/1000)*100);
+      document.getElementById('percentText').textContent = percent + '%';
+      document.getElementById('inputGoals').value = cur;
+      document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+      document.getElementById('footerYear').textContent = new Date().getFullYear();
+    }
+
+    // inicializa valores
+    (function init(){
+      // se quiser, atualize cfg aqui com números reais
+      updateUI();
+      // colocar a data de referência
+      document.getElementById('inputRefDate').value = new Date().toLocaleDateString();
+    })();
+
+    /* ---------- Projeção simples ---------- 
+       Método:
+       - Recebe gols atuais G
+       - Recebe média por jogo m
+       - Recebe jogos por mês j
+       - Calcula gols faltantes F = 1000 - G
+       - Gols por mês = m * j => meses = F / (m * j)
+       - Estima data somando meses (arredondado)
+    */
+    document.getElementById('calcBtn').addEventListener('click', function(){
+      const G = Number(document.getElementById('inputGoals').value) || 0;
+      const m = Number(document.getElementById('inputGoalsPerGame').value) || 0;
+      const j = Number(document.getElementById('inputGamesPerMonth').value) || 0;
+      if(G >= 1000){
+        document.getElementById('projResult').textContent = 'Já alcançado: 1000+';
+        return;
+      }
+      const F = 1000 - G;
+      if(m <= 0 || j <= 0){
+        document.getElementById('projResult').textContent = 'Informe média por jogo e jogos por mês maiores que zero.';
+        return;
+      }
+      const goalsPerMonth = m * j;
+      const monthsNeeded = F / goalsPerMonth;
+      // converte mesesNeeded para dias aproximados
+      const daysNeeded = Math.round(monthsNeeded * 30.44);
+      const today = new Date();
+      const estDate = new Date(today.getTime() + daysNeeded * 24*60*60*1000);
+      const months = Math.floor(monthsNeeded);
+      const resultText = `Faltam ${F} gols. Com ${m.toFixed(2)} gols/jogo e ${j} jogos/mês, leva ~${monthsNeeded.toFixed(1)} meses (~${daysNeeded} dias). Estimativa: ${estDate.toLocaleDateString()}.`;
+      document.getElementById('projResult').textContent = resultText;
+    });
+
+    /* ---------- Interface rápida para atualizar os gols (opcional) ---------- */
+    // Permite ao admin editar "Gols atuais" diretamente na página e salvar temporariamente (session)
+    document.getElementById('inputGoals').addEventListener('change', function(){
+      cfg.goalsCurrent = Number(this.value) || 0;
+      updateUI();
+    });
+    // também atrelar os valores por clube/seleção se quiser via console:
+    // Ex.: cfg.goalsByClub = 700; cfg.goalsBySel = 140; cfg.goalsCurrent = 840; updateUI();
+
+    /* ---------- Observação: integração com API esportiva ----------
+      - Para automatizar, use APIs como API-Football, Soccer API ou scraping de fontes confiáveis.
+      - Exemplo (pseudo):
+         fetch('https://api.example.com/cr7/stats?apikey=XXX').then(res=>res.json()).then(data=>{
+           cfg.goalsCurrent = data.total;
+           cfg.goalsByClub = data.clubGoals;
+           cfg.goalsBySel = data.nationalGoals;
+           updateUI();
+         });
+      - Substitua placeholders de anúncio pelos códigos do Google AdSense quando disponíveis.
+    */
+
+  </script>
+</body>
+</html>
